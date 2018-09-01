@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.cell {
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.cell-select {
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+  display: inline-block;
+}
+
+.ships-container {
+  display: flex;
+  justify-content: space-between;
+  width: 120px;
+}
+
+.ship-container {
+  cursor: pointer;
+}
+.board-container {
+  width: 270px;
+  height: 270px;
+}
+
+.app-container {
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
