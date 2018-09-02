@@ -15,7 +15,6 @@ class ShipSelect extends Component {
 
   render() {
     let arr = this.shipHelper();
-
     return (
       <div
         className="ships-container"
@@ -25,6 +24,7 @@ class ShipSelect extends Component {
             : { flexDirection: "column", width: "150px", height: "140px" }
         }
       >
+        Select ship. Press 'Space' to switch direction.
         {arr.map(ship => {
           return (
             <div

@@ -1,22 +1,9 @@
 import React, { Component } from "react";
 import unique from "lodash.uniqueid";
 import Cell from "./Cell";
+import axios from "axios";
 import ShipSelect from "./ShipSelect";
-
-let boardArray = [
-  [1, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null],
-  [0, 0, 0, null, null, null, null, null, null, null, null, null]
-];
+import boardArray from "./boardArray";
 
 class PlayerBoard extends Component {
   state = {
@@ -41,6 +28,29 @@ class PlayerBoard extends Component {
     document.removeEventListener("keypress", this.switchDirection.bind(this));
   }
 
+  componentDidMount() {
+    //hard coded server here (wouldn't do this normally)
+    (async () => {
+      let {
+        data: { coords }
+      } = await axios.get("http://localhost:5000/shoot");
+      console.log(coords);
+      this.shoot(coords);
+    })();
+  }
+
+  shoot(coords) {
+    if (!this.props.turn) {
+      let { board } = this.state;
+      if (board[coords[1]][coords[0]]) {
+        board[coords[1]][coords[0]] = 0;
+        this.setState({ board });
+        this.winCheck();
+      }
+    }
+    this.props.setTurn();
+  }
+
   shipSelect(e, data) {
     this.setState({ ship: data });
   }
@@ -51,21 +61,13 @@ class PlayerBoard extends Component {
     }
   }
 
-  /*
-    this.state.vertical
-      ? ((check = !board[start][coords[0]]),
-        (check2 = !board[start + ship - 1][coords[0]]))
-      : ((check = !board[coords[1]][start]),
-        (check2 = !board[coords[1]][start + ship - 1]));
-
-
-*/
   boardModifier(coords) {
     let { ship, board, ships } = this.state;
     let start; //where to start
     let check = this.state.vertical ? (start = coords[1]) : (start = coords[0]);
     if (start + ship <= 12)
       for (let j = start; j < start + ship; j++) {
+        // eslint-disable-next-line
         this.state.vertical
           ? board[j][coords[0]] === 1
             ? (check = false)
@@ -90,6 +92,7 @@ class PlayerBoard extends Component {
         }
       });
       ship = ships[0];
+      if (ships.length === 0) this.props.setStart();
       this.setState({ board, ships, ship });
     }
   }
@@ -101,7 +104,7 @@ class PlayerBoard extends Component {
         if (cell) count++;
       });
     });
-    if (!count) console.log("PC WINS W00T");
+    if (!count) alert("PC WINS W00T");
   }
   render() {
     let { board } = this.state;
@@ -112,11 +115,19 @@ class PlayerBoard extends Component {
         tabIndex="0"
         onKeyPress={this.switchDirection.bind(this)}
       >
-        <ShipSelect
-          vertical={this.state.vertical}
-          shipSelect={this.shipSelect.bind(this)}
-          ships={this.state.ships}
-        />
+        <div
+          style={
+            this.state.ships.length === 0
+              ? { display: "none" }
+              : { display: "initial" }
+          }
+        >
+          <ShipSelect
+            vertical={this.state.vertical}
+            shipSelect={this.shipSelect.bind(this)}
+            ships={this.state.ships}
+          />
+        </div>
         <div className="board-container">
           {board.map((arr, y) => {
             return arr.map((cell, x) => {
@@ -125,7 +136,6 @@ class PlayerBoard extends Component {
                   key={unique()}
                   cellState={cell}
                   coords={[x, y]}
-                  setBoard={this.setBoard.bind(this)}
                   boardModifier={this.boardModifier.bind(this)}
                 />
               );
