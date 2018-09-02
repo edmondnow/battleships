@@ -20,9 +20,16 @@ class Cell extends Component {
   }
 
   render() {
+    let { cellState } = this.props;
     return (
       <div onClick={() => this.clickHelper()} className="cell">
-        {this.props.cellState}
+        {cellState ? (
+          <div className="hit" />
+        ) : cellState !== null ? (
+          <div className="unhit" />
+        ) : (
+          ""
+        )}
       </div>
     );
   }

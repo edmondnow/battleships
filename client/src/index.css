@@ -9,7 +9,30 @@ body {
   height: 20px;
   border: 1px solid black;
   display: inline-block;
+  font-size: 0.8em;
+  text-align: center;
   cursor: pointer;
+  overflow: hidden;
+}
+
+.hit {
+  border-radius: 50%;
+  width: 10px;
+  margin: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 10px;
+  background-color: red;
+}
+
+.unhit {
+  border-radius: 50%;
+  width: 10px;
+  margin: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 10px;
+  background-color: gray;
 }
 
 .cell-select {
@@ -21,16 +44,21 @@ body {
 
 .ships-container {
   display: flex;
-  justify-content: space-between;
-  width: 120px;
+  justify-content: space-around;
+  border: 1px solid red;
+  padding: 20px;
 }
 
 .ship-container {
   cursor: pointer;
+  display: flex;
 }
 .board-container {
-  width: 270px;
-  height: 270px;
+  font-size: 0;
+  width: 265px;
+  height: 265px;
+  padding: 2px;
+  border: 2px solid blue;
 }
 
 .app-container {
@@ -38,4 +66,13 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+.player-container {
+  display: flex;
+  height: 300px;
+  justify-content: space-between;
+  align-items: center;
+  width: 500px;
+  padding: 20px;
+  border: 1px solid green;
 }

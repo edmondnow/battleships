@@ -1,13 +1,12 @@
 import React, { Component } from "react";
+import unique from "lodash.uniqueid";
 
 class ShipSelect extends Component {
-  state = { ships: [5, 4, 3, 2] };
-
   shipHelper() {
-    let arr = this.state.ships.map(cell => {
+    let arr = this.props.ships.map(cell => {
       let arr2 = [];
       for (let i = 0; i < cell; i++) {
-        arr2.push(<div className="cell-select" />);
+        arr2.push(<div className="cell-select" key={unique()} />);
       }
       return arr2;
     });
@@ -22,8 +21,8 @@ class ShipSelect extends Component {
         className="ships-container"
         style={
           this.props.vertical
-            ? { flexDirection: "row" }
-            : { flexDirection: "column" }
+            ? { flexDirection: "row", width: "150px", height: "140px" }
+            : { flexDirection: "column", width: "150px", height: "140px" }
         }
       >
         {arr.map(ship => {
@@ -31,7 +30,12 @@ class ShipSelect extends Component {
             <div
               className="ship-container"
               onClick={e => this.props.shipSelect(e, ship.length)}
-              id={ship.length}
+              style={
+                this.props.vertical
+                  ? { flexDirection: "column" }
+                  : { flexDirection: "row" }
+              }
+              key={unique()}
             >
               {ship.map(cell => cell)}
             </div>
